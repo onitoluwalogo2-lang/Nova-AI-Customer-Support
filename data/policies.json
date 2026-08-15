@@ -1,0 +1,63 @@
+{
+  "policies": {
+    "returns_and_refunds": {
+      "eligibility": "Customers may request a return or refund according to the company's return conditions.",
+      "condition": "Products must meet the company's stated return requirements.",
+      "process": [
+        "Verify the customer's order information.",
+        "Check whether the request meets the return requirements.",
+        "Explain the applicable next steps.",
+        "Escalate unusual or disputed cases to human support."
+      ]
+    },
+
+    "warranty": {
+      "coverage": "Products are covered according to the warranty period listed for the specific product.",
+      "process": [
+        "Identify the product.",
+        "Check the applicable warranty period.",
+        "Determine whether the reported issue falls within warranty coverage.",
+        "Escalate cases requiring technical or manual review."
+      ]
+    },
+
+    "shipping_and_delivery": {
+      "information": "Customers can receive information about shipping and delivery through the company's available order and delivery records.",
+      "process": [
+        "Verify the customer's order.",
+        "Check available delivery information.",
+        "Provide the customer with the relevant status or next step.",
+        "Escalate delayed, missing, or unusual deliveries when necessary."
+      ]
+    },
+
+    "payments": {
+      "information": "Customers can receive assistance with payment-related questions and transaction issues.",
+      "process": [
+        "Identify the customer's order or transaction.",
+        "Determine the type of payment issue.",
+        "Provide the appropriate information or next step.",
+        "Escalate unresolved payment problems to human support."
+      ]
+    },
+
+    "privacy_and_security": {
+      "principles": [
+        "Protect customer information.",
+        "Do not expose private customer information unnecessarily.",
+        "Only request information needed to resolve the customer's issue.",
+        "Escalate suspected security incidents to human support."
+      ]
+    },
+
+    "escalation": {
+      "required_when": [
+        "The issue cannot be resolved using available company information.",
+        "The customer disputes a decision.",
+        "A payment or security issue requires human review.",
+        "A warranty or return case requires manual assessment.",
+        "The customer requests a human representative."
+      ]
+    }
+  }
+}

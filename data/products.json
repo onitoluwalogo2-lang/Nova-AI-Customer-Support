@@ -1,0 +1,36 @@
+{
+  "products": [
+    {
+      "name": "Nova Play Station",
+      "category": "Gaming",
+      "price": 350,
+      "description": "4K gaming system designed for entertainment and home setup.",
+      "features": [
+        "Ultra-high-speed custom SSD",
+        "Immersive dual-sense wireless controller",
+        "4K gaming up to 120Hz"
+      ],
+      "stock": 30,
+      "warranty_years": 2,
+      "best_for": [
+        "Gamers",
+        "Home users"
+      ]
+    },
+    {
+      "name": "Nova Smart Glasses",
+      "category": "Wearable Technology",
+      "warranty_years": 1
+    },
+    {
+      "name": "Nova Camera",
+      "category": "Camera",
+      "warranty_years": 2
+    },
+    {
+      "name": "Nova WiFi Router",
+      "category": "Networking",
+      "warranty_years": 1
+    }
+  ]
+}
