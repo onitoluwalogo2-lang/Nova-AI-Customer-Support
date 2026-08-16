@@ -1,3 +1,5 @@
+import json
+
 from knowledge.knowledge_base import (
     load_products,
     load_policies,
@@ -5,6 +7,10 @@ from knowledge.knowledge_base import (
     get_return_policy,
     search_knowledge
 )
+
+from openai import OpenAI
+
+client = OpenAI()
 
 # Load knowledge through the knowledge layer
 products = load_products()
@@ -126,6 +132,31 @@ def update_support_case(product, intent):
     if intent:
         conversation["intent"] = intent
         support_case["intent"] = intent
+
+
+def generate_ai_response(question, knowledge_results):
+    knowledge_text = json.dumps(
+        knowledge_results,
+        indent=2
+    )
+
+    response = client.responses.create(
+        model="gpt-5-mini",
+        instructions=(
+            "You are Nova, a professional customer-support assistant. "
+            "Answer the customer's question using only the provided "
+            "company knowledge. Do not invent product details, prices, "
+            "policies, warranties, or guarantees. "
+            "If the knowledge does not contain enough information, "
+            "say so clearly."
+        ),
+        input=(
+            f"Customer question:\n{question}\n\n"
+            f"Company knowledge:\n{knowledge_text}"
+        )
+    )
+
+    return response.output_text
 
 
 def answer_question(question):
