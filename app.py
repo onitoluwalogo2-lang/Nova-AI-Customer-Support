@@ -143,13 +143,17 @@ def generate_ai_response(question, knowledge_results):
     response = client.responses.create(
         model="gpt-5-mini",
         instructions=(
-            "You are Nova, a professional customer-support assistant. "
-            "Answer the customer's question using only the provided "
-            "company knowledge. Do not invent product details, prices, "
-            "policies, warranties, or guarantees. "
-            "If the knowledge does not contain enough information, "
-            "say so clearly."
-        ),
+    "You are Nova, a professional customer-support assistant. "
+    "Answer the customer's question using only the provided "
+    "company knowledge. "
+    "Do not invent product details, prices, policies, "
+    "warranties, requirements, timelines, fees, or procedures. "
+    "Only state requirements or next steps that are explicitly "
+    "supported by the provided company knowledge. "
+    "If the knowledge does not contain enough information, "
+    "say that the information is not available and do not guess. "
+    "Keep responses concise and professional."
+),
         input=(
             f"Customer question:\n{question}\n\n"
             f"Company knowledge:\n{knowledge_text}"
@@ -196,7 +200,7 @@ def answer_question(question):
                 support_case["status"] = "Resolved"
                 support_case["next_action"] = "Provide product price"
 
-                return result["information"]
+                return generate_ai_response(question, [result])
 
         if product:
             support_case["status"] = "Needs information"
@@ -211,7 +215,7 @@ def answer_question(question):
         support_case["next_action"] = "Identify the product"
 
         return "Which product would you like the price for?"
-       # Warranty
+           # Warranty
     if intent == "Warranty":
 
         for result in knowledge_results:
@@ -219,8 +223,7 @@ def answer_question(question):
                 support_case["status"] = "Resolved"
                 support_case["next_action"] = "Provide warranty information"
 
-                return result["information"]
-
+                return generate_ai_response(question, [result])
         if product:
             support_case["status"] = "Needs information"
             support_case["next_action"] = "Add warranty information to knowledge base"
@@ -287,13 +290,13 @@ def answer_question(question):
             support_case["status"] = "Needs verification"
             support_case["next_action"] = "Verify order information"
 
-            return (
-                f"I can help you with returning the {product['name']}. "
-                f"{return_policy['eligibility']} "
-                "The next step is to verify your order information "
-                "and check whether the request meets the return requirements."
-            )
-
+            return generate_ai_response(question, [
+                {
+                    "type": "policy",
+                    "name": "Returns and Refunds",
+                    "information": return_policy
+                }
+            ])
         if product:
             support_case["status"] = "Needs information"
             support_case["next_action"] = "Retrieve return policy"
@@ -355,11 +358,13 @@ def answer_question(question):
             support_case["status"] = "Needs verification"
             support_case["next_action"] = "Check order and delivery information"
 
-            return (
-                f"{shipping_policy['information']} "
-                "The next step is to verify your order and check the "
-                "available delivery information."
-            )
+            return generate_ai_response(question, [
+                {
+                    "type": "policy",
+                    "name": "Shipping and Delivery",
+                    "information": shipping_policy
+                }
+            ])
 
         support_case["status"] = "Needs information"
         support_case["next_action"] = "Retrieve shipping policy"
@@ -416,11 +421,13 @@ def answer_question(question):
             support_case["status"] = "Needs verification"
             support_case["next_action"] = "Identify the order or transaction"
 
-            return (
-                f"{payment_policy['information']} "
-                "The next step is to identify the order or transaction "
-                "and determine the type of payment issue."
-            )
+            return generate_ai_response(question, [
+                {
+                    "type": "policy",
+                    "name": "Payments",
+                    "information": payment_policy
+                }
+            ])
 
         support_case["status"] = "Needs information"
         support_case["next_action"] = "Retrieve payment policy"
