@@ -107,6 +107,33 @@ def test_new_intent_resets_human_escalation():
     assert support_case["status"] == "Resolved"
     assert support_case["needs_human"] is False
 
+def test_product_memory():
+    reset_state()
+
+    answer_question("What is the price of the Nova Play Station?")
+
+    assert conversation["product"]["name"] == "Nova Play Station"
+
+    answer_question("What about the warranty?")
+
+    assert conversation["product"]["name"] == "Nova Play Station"
+    assert support_case["product"] == "Nova Play Station"
+    assert support_case["intent"] == "Warranty"
+
+
+def test_product_context_switch():
+    reset_state()
+
+    answer_question("What is the price of the Nova Play Station?")
+
+    assert conversation["product"]["name"] == "Nova Play Station"
+
+    answer_question("What is the warranty on the Nova Camera?")
+
+    assert conversation["product"]["name"] == "Nova Camera"
+    assert support_case["product"] == "Nova Camera"
+    assert support_case["intent"] == "Warranty"
+
 
 if __name__ == "__main__":
     test_price_request()
@@ -117,5 +144,7 @@ if __name__ == "__main__":
     test_security_escalation()
     test_unknown_request_escalation()
     test_new_intent_resets_human_escalation()
+    test_product_memory()
+    test_product_context_switch()
 
     print("All evaluation tests passed!")
