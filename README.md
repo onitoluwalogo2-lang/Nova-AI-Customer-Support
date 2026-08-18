@@ -104,3 +104,40 @@ Customers can type:
 
 ```text
 case
+```
+
+### Evaluation
+
+Nova includes a dedicated evaluation suite for testing customer-support behavior.
+
+The evaluation suite currently covers:
+
+- Price handling
+- Return handling
+- Shipping handling
+- Delivery escalation
+- Payment escalation
+- Security escalation
+- Unknown request handling
+- Escalation reset
+- Product memory
+- Product context switching
+
+The evaluation tests use a controlled AI response so the support workflow can be evaluated without depending on the OpenAI API.
+
+Current evaluation result:
+
+```text
+Nova AI Evaluation Report
+-------------------------
+Price handling                  PASS
+Return handling                 PASS
+Shipping handling               PASS
+Delivery escalation             PASS
+Payment escalation              PASS
+Security escalation             PASS
+Unknown request handling        PASS
+Escalation reset                PASS
+Product memory                  PASS
+Product context switching       PASS
+10/10 evaluation scenarios passed
