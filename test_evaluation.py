@@ -1,4 +1,14 @@
+import app
+
 from app import answer_question, conversation, support_case
+
+
+def fake_ai_response(question, knowledge_results):
+    return "Test AI response"
+
+
+app.generate_ai_response = fake_ai_response
+
 
 
 def reset_state():
