@@ -130,9 +130,14 @@ def update_support_case(product, intent):
         support_case["product"] = product["name"]
 
     if intent:
+        # Reset case-specific escalation state when a new intent is detected
+        if intent != conversation["intent"]:
+            support_case["status"] = "New"
+            support_case["needs_human"] = False
+            support_case["next_action"] = "Understand the customer's request"
+
         conversation["intent"] = intent
         support_case["intent"] = intent
-
 
 def generate_ai_response(question, knowledge_results):
     knowledge_text = json.dumps(
