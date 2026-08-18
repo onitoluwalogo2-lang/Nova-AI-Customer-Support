@@ -10,6 +10,8 @@ from knowledge.knowledge_base import (
 
 from openai import OpenAI
 
+MODEL_NAME = "gpt-5-mini"
+
 client = OpenAI()
 
 # Load knowledge through the knowledge layer
@@ -146,7 +148,7 @@ def generate_ai_response(question, knowledge_results):
     )
 
     response = client.responses.create(
-        model="gpt-5-mini",
+        model=MODEL_NAME,
         instructions=(
     "You are Nova, a professional customer-support assistant. "
     "Answer the customer's question using only the provided "
