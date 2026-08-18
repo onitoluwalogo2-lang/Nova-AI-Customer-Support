@@ -136,15 +136,29 @@ def test_product_context_switch():
 
 
 if __name__ == "__main__":
-    test_price_request()
-    test_return_request()
-    test_shipping_request()
-    test_late_delivery_escalation()
-    test_payment_escalation()
-    test_security_escalation()
-    test_unknown_request_escalation()
-    test_new_intent_resets_human_escalation()
-    test_product_memory()
-    test_product_context_switch()
+    tests = [
+        ("Price handling", test_price_request),
+        ("Return handling", test_return_request),
+        ("Shipping handling", test_shipping_request),
+        ("Delivery escalation", test_late_delivery_escalation),
+        ("Payment escalation", test_payment_escalation),
+        ("Security escalation", test_security_escalation),
+        ("Unknown request handling", test_unknown_request_escalation),
+        ("Escalation reset", test_new_intent_resets_human_escalation),
+        ("Product memory", test_product_memory),
+        ("Product context switching", test_product_context_switch),
+    ]
 
-    print("All evaluation tests passed!")
+    print()
+    print("Nova AI Evaluation Report")
+    print("-------------------------")
+
+    passed = 0
+
+    for name, test in tests:
+        test()
+        print(f"{name:<30} PASS")
+        passed += 1
+
+    print()
+    print(f"{passed}/{len(tests)} evaluation scenarios passed")
