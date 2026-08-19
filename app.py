@@ -134,6 +134,11 @@ def detect_intent(question):
     return None
 
 
+def set_case_status(status):
+    support_case["status"] = status
+    logger.info("Support case status: %s", status)
+
+
 def update_support_case(product, intent):
     if product:
         conversation["product"] = product
@@ -189,7 +194,7 @@ def answer_question(question):
     question_lower = question.lower()
 
     product = find_product(products, question)
-    
+
     if product:
         logger.info("Product identified: %s", product["name"])
 
@@ -225,14 +230,14 @@ def answer_question(question):
 
         for result in knowledge_results:
             if result["type"] == "price":
-                support_case["status"] = "Resolved"
+                set_case_status("Resolved")
                 logger.info("Support case resolved: price request")
                 support_case["next_action"] = "Provide product price"
 
                 return generate_ai_response(question, [result])
 
         if product:
-            support_case["status"] = "Needs information"
+            set_case_status("Needs information")
             support_case["next_action"] = "Add product price to knowledge base"
 
             return (
@@ -240,7 +245,7 @@ def answer_question(question):
                 f"{product['name']} in my knowledge base."
             )
 
-        support_case["status"] = "Needs clarification"
+        set_case_status("Needs clarification")
         support_case["next_action"] = "Identify the product"
 
         return "Which product would you like the price for?"
@@ -249,13 +254,13 @@ def answer_question(question):
 
         for result in knowledge_results:
             if result["type"] == "warranty":
-                support_case["status"] = "Resolved"
+                set_case_status("Resolved")
                 logger.info("Support case resolved: warranty request")
                 support_case["next_action"] = "Provide warranty information"
 
                 return generate_ai_response(question, [result])
         if product:
-            support_case["status"] = "Needs information"
+            set_case_status("Needs information")
             support_case["next_action"] = "Add warranty information to knowledge base"
 
             return (
@@ -263,7 +268,7 @@ def answer_question(question):
                 f"the {product['name']} in my knowledge base."
             )
 
-        support_case["status"] = "Needs clarification"
+        set_case_status("Needs clarification")
         support_case["next_action"] = "Identify the product"
 
         return "Which product would you like to ask about?"
@@ -295,7 +300,7 @@ def answer_question(question):
         ]
 
         if any(word in question_lower for word in return_problem_words):
-            support_case["status"] = "Human review recommended"
+            set_case_status("Human review recommended")
             support_case["needs_human"] = True
             support_case["next_action"] = "Verify return or refund status and escalate disputed case if necessary"
 
@@ -317,7 +322,7 @@ def answer_question(question):
                 break
 
         if product and return_policy:
-            support_case["status"] = "Needs verification"
+            set_case_status("Needs verification")
             support_case["next_action"] = "Verify order information"
 
             return generate_ai_response(question, [
@@ -328,7 +333,7 @@ def answer_question(question):
                 }
             ])
         if product:
-            support_case["status"] = "Needs information"
+            set_case_status("Needs information")
             support_case["next_action"] = "Retrieve return policy"
 
             return (
@@ -362,7 +367,7 @@ def answer_question(question):
         ]
 
         if any(word in question_lower for word in delivery_problem_words):
-            support_case["status"] = "Human review recommended"
+            set_case_status("Human review recommended")
             support_case["needs_human"] = True
             support_case["next_action"] = "Verify order and escalate delivery issue if necessary"
 
@@ -385,7 +390,7 @@ def answer_question(question):
                 break
 
         if shipping_policy:
-            support_case["status"] = "Needs verification"
+            set_case_status("Needs verification")
             support_case["next_action"] = "Check order and delivery information"
 
             return generate_ai_response(question, [
@@ -396,7 +401,7 @@ def answer_question(question):
                 }
             ])
 
-        support_case["status"] = "Needs information"
+        set_case_status("Needs information")
         support_case["next_action"] = "Retrieve shipping policy"
 
         return (
@@ -426,7 +431,7 @@ def answer_question(question):
         ]
 
         if any(word in question_lower for word in payment_problem_words):
-            support_case["status"] = "Human review recommended"
+            set_case_status("Human review recommended")
             support_case["needs_human"] = True
             support_case["next_action"] = "Verify transaction and escalate payment dispute if necessary"
 
@@ -448,7 +453,7 @@ def answer_question(question):
                 break
 
         if payment_policy:
-            support_case["status"] = "Needs verification"
+            set_case_status("Needs verification")
             support_case["next_action"] = "Identify the order or transaction"
 
             return generate_ai_response(question, [
@@ -459,7 +464,7 @@ def answer_question(question):
                 }
             ])
 
-        support_case["status"] = "Needs information"
+        set_case_status("Needs information")
         support_case["next_action"] = "Retrieve payment policy"
 
         return (
