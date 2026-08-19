@@ -223,6 +223,7 @@ def answer_question(question):
         for result in knowledge_results:
             if result["type"] == "price":
                 support_case["status"] = "Resolved"
+                logger.info("Support case resolved: price request")
                 support_case["next_action"] = "Provide product price"
 
                 return generate_ai_response(question, [result])
@@ -246,6 +247,7 @@ def answer_question(question):
         for result in knowledge_results:
             if result["type"] == "warranty":
                 support_case["status"] = "Resolved"
+                logger.info("Support case resolved: warranty request")
                 support_case["next_action"] = "Provide warranty information"
 
                 return generate_ai_response(question, [result])
