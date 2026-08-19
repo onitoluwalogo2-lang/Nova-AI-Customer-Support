@@ -132,6 +132,19 @@ def test_product_context_switch():
     assert conversation["product"]["name"] == "Nova Camera"
     assert support_case["product"] == "Nova Camera"
     assert support_case["intent"] == "Warranty"
+    assert support_case["status"] == "Resolved"
+    
+
+def test_follow_up_question():
+    reset_state()
+
+    answer_question("What is the price of the Nova Play Station?")
+    answer_question("What about the warranty?")
+
+    assert conversation["product"]["name"] == "Nova Play Station"
+    assert support_case["product"] == "Nova Play Station"
+    assert support_case["intent"] == "Warranty"
+    assert support_case["status"] == "Resolved"
 
 
 def test_api_failure_fallback():
@@ -173,6 +186,7 @@ if __name__ == "__main__":
         ("Escalation reset", test_new_intent_resets_human_escalation),
         ("Product memory", test_product_memory),
         ("Product context switching", test_product_context_switch),
+        ("Follow-up question", test_follow_up_question),
         ("API failure fallback", test_api_failure_fallback),
     ]
 
