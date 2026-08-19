@@ -189,6 +189,9 @@ def answer_question(question):
     question_lower = question.lower()
 
     product = find_product(products, question)
+    
+    if product:
+        logger.info("Product identified: %s", product["name"])
 
     # Use remembered product if no product is mentioned
     if not product and conversation["product"]:
