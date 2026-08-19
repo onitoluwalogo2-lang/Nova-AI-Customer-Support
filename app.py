@@ -147,27 +147,34 @@ def generate_ai_response(question, knowledge_results):
         indent=2
     )
 
-    response = client.responses.create(
-        model=MODEL_NAME,
-        instructions=(
-    "You are Nova, a professional customer-support assistant. "
-    "Answer the customer's question using only the provided "
-    "company knowledge. "
-    "Do not invent product details, prices, policies, "
-    "warranties, requirements, timelines, fees, or procedures. "
-    "Only state requirements or next steps that are explicitly "
-    "supported by the provided company knowledge. "
-    "If the knowledge does not contain enough information, "
-    "say that the information is not available and do not guess. "
-    "Keep responses concise and professional."
-),
-        input=(
-            f"Customer question:\n{question}\n\n"
-            f"Company knowledge:\n{knowledge_text}"
+    try:
+        response = client.responses.create(
+            model=MODEL_NAME,
+            instructions=(
+                "You are Nova, a professional customer-support assistant. "
+                "Answer the customer's question using only the provided "
+                "company knowledge. "
+                "Do not invent product details, prices, policies, "
+                "warranties, requirements, timelines, fees, or procedures. "
+                "Only state requirements or next steps that are explicitly "
+                "supported by the provided company knowledge. "
+                "If the knowledge does not contain enough information, "
+                "say that the information is not available and do not guess. "
+                "Keep responses concise and professional."
+            ),
+            input=(
+                f"Customer question:\n{question}\n\n"
+                f"Company knowledge:\n{knowledge_text}"
+            )
         )
-    )
 
-    return response.output_text
+        return response.output_text
+
+    except Exception:
+        return (
+            "I'm temporarily unable to generate a response. "
+            "Please try again shortly or contact human support if the issue is urgent."
+        )
 
 
 def answer_question(question):

@@ -10,7 +10,6 @@ def fake_ai_response(question, knowledge_results):
 app.generate_ai_response = fake_ai_response
 
 
-
 def reset_state():
     conversation["product"] = None
     conversation["intent"] = None
@@ -135,6 +134,38 @@ def test_product_context_switch():
     assert support_case["intent"] == "Warranty"
 
 
+def test_api_failure_fallback():
+    original_client = app.client
+    original_generate_ai_response = app.generate_ai_response
+
+    class FakeResponses:
+        def create(self, **kwargs):
+            raise Exception("Simulated OpenAI failure")
+
+    class FakeClient:
+        responses = FakeResponses()
+
+    app.client = FakeClient()
+    app.generate_ai_response = original_generate_ai_response
+
+    try:
+        result = app.generate_ai_response(
+            "What is the price of the Nova Play Station?",
+            []
+        )
+
+        expected = (
+            "I'm temporarily unable to generate a response. "
+            "Please try again shortly or contact human support if the issue is urgent."
+        )
+
+        assert result == expected
+
+    finally:
+        app.client = original_client
+        app.generate_ai_response = original_generate_ai_response
+        
+
 if __name__ == "__main__":
     tests = [
         ("Price handling", test_price_request),
@@ -147,6 +178,7 @@ if __name__ == "__main__":
         ("Escalation reset", test_new_intent_resets_human_escalation),
         ("Product memory", test_product_memory),
         ("Product context switching", test_product_context_switch),
+        ("API failure fallback", test_api_failure_fallback),
     ]
 
     print()
