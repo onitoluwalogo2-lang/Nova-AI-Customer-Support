@@ -1,4 +1,12 @@
 import json
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+logger = logging.getLogger(__name__)
 
 from knowledge.knowledge_base import (
     load_products,
@@ -198,6 +206,9 @@ def answer_question(question):
         knowledge_question
     )
     intent = detect_intent(question)
+
+    if intent:
+        logger.info("Intent detected: %s", intent)
 
             # Only remember the previous intent when the customer
     # is continuing the same conversation.
@@ -481,6 +492,7 @@ def answer_question(question):
     support_case["intent"] = None
     support_case["status"] = "Needs human support"
     support_case["needs_human"] = True
+    logger.warning("Support case escalated to human support")
     support_case["next_action"] = "Escalate to human support"
 
     return (
